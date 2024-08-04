@@ -1,6 +1,8 @@
 package com.courseAndStudentManagementSystem.service;
 
+import com.courseAndStudentManagementSystem.model.Course;
 import com.courseAndStudentManagementSystem.model.Student;
+import com.courseAndStudentManagementSystem.repository.CourseRepository;
 import com.courseAndStudentManagementSystem.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,9 +14,18 @@ import java.util.UUID;
 public class StudentService {
     @Autowired
     private StudentRepository studentRepository;
+    @Autowired
+    private CourseRepository courseRepository;
 
     public Student createStudent(Student student) {
-        return studentRepository.save(student);
+        Student savedStudent = studentRepository.save(student);
+
+        for (Course course : student.getCourses()) {
+            course.getStudents().add(savedStudent);
+            courseRepository.save(course);
+        }
+
+        return savedStudent;
     }
 
     public Student updateStudent(UUID studentId, Student student) {
@@ -25,9 +36,13 @@ public class StudentService {
         existingStudent.setDateOfBirth(student.getDateOfBirth());
 
         existingStudent.getCourses().clear();
-        existingStudent.getCourses().addAll(student.getCourses());
+        for (Course course : student.getCourses()) {
+            course.getStudents().add(existingStudent);
+            courseRepository.save(course);
+            existingStudent.getCourses().add(course);
+        }
 
-        return studentRepository.save(student);
+        return studentRepository.save(existingStudent);
     }
 
     public void deleteStudent(UUID studentId) {

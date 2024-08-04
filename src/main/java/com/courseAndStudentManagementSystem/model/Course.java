@@ -1,5 +1,7 @@
 package com.courseAndStudentManagementSystem.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 import java.time.Instant;
@@ -9,6 +11,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "Courses")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "courseId")
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
