@@ -27,8 +27,8 @@ public class Course {
     @ManyToOne
     @JoinColumn(name = "teacherId")
     private Teacher teacher;
-    @ManyToMany(mappedBy = "courses")
-    @JoinTable(name = "couses_students", joinColumns = @JoinColumn(name = "courseId"), inverseJoinColumns = @JoinColumn(name = "studentId"))
+    @ManyToMany()
+    @JoinTable(name = "courses_students", joinColumns = @JoinColumn(name = "courseId"), inverseJoinColumns = @JoinColumn(name = "studentId"))
     private List<Student> students = new ArrayList<>();
 
     public UUID getCourseId() {

@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 @Table(name = "Teachers")
 public class Teacher extends Person {
-    @OneToMany(mappedBy = "teachers")
+    @OneToMany(mappedBy = "teacher")
     private List<Course> courses = new ArrayList<>();
 
     public List<Course> getCourses() {
