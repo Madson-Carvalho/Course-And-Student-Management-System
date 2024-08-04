@@ -1,6 +1,8 @@
 package com.courseAndStudentManagementSystem.service;
 
+import com.courseAndStudentManagementSystem.model.Course;
 import com.courseAndStudentManagementSystem.model.Teacher;
+import com.courseAndStudentManagementSystem.repository.CourseRepository;
 import com.courseAndStudentManagementSystem.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,9 +14,18 @@ import java.util.UUID;
 public class TeacherService {
     @Autowired
     private TeacherRepository teacherRepository;
+    @Autowired
+    private CourseRepository courseRepository;
 
     public Teacher createTeacher(Teacher teacher){
-        return teacherRepository.save(teacher);
+        Teacher savedTeacher = teacherRepository.save(teacher);
+
+        for (Course course : teacher.getCourses()) {
+            course.setTeacher(savedTeacher);
+            courseRepository.save(course);
+        }
+
+        return savedTeacher;
     }
 
     public Teacher updateTeacher(UUID teacherId, Teacher teacher){
@@ -24,7 +35,11 @@ public class TeacherService {
         existingTeacher.setEmail(teacher.getEmail());
 
         existingTeacher.getCourses().clear();
-        existingTeacher.getCourses().addAll(teacher.getCourses());
+        for (Course course : teacher.getCourses()) {
+            course.setTeacher(existingTeacher);
+            courseRepository.save(course);
+            existingTeacher.getCourses().add(course);
+        }
 
         return teacherRepository.save(existingTeacher);
     }
