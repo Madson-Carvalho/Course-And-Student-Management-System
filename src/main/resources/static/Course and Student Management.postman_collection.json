@@ -1,0 +1,334 @@
+{
+	"info": {
+		"_postman_id": "4f4cbeee-ec36-41dd-b556-82b2cb394253",
+		"name": "Course and Student Management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25107168"
+	},
+	"item": [
+		{
+			"name": "Find All Teacher",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/teachers/find-all-teachers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"teachers",
+						"find-all-teachers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find All Student",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/students/find-all-students",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"students",
+						"find-all-students"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find All Courses",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/courses/find-all-courses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"courses",
+						"find-all-courses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Course",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "// {\n//     \"name\": \"Introdução à Programação I\",\n//     \"description\": \"Curso básico de introdução à programação I.\",\n//     \"initialDate\": \"2024-08-01T00:00:00Z\",\n//     \"finalDate\": \"2024-12-31T23:59:59Z\"\n// }\n// {\n//     \"name\": \"Estruturas de Dados\",\n//     \"description\": \"Curso sobre estruturas de dados fundamentais.\",\n//     \"initialDate\": \"2024-08-15T00:00:00Z\",\n//     \"finalDate\": \"2024-12-15T23:59:59Z\"\n// }\n// {\n//     \"name\": \"Desenvolvimento Web\",\n//     \"description\": \"Curso de desenvolvimento para a web.\",\n//     \"initialDate\": \"2024-09-01T00:00:00Z\",\n//     \"finalDate\": \"2024-12-31T23:59:59Z\"\n// }\n{\n    \"name\": \"Engenharia de software\",\n    \"description\": \"Curso de engenharia de software.\",\n    \"initialDate\": \"2024-10-01T00:00:00Z\",\n    \"finalDate\": \"2024-12-31T23:59:59Z\",\n    \"teacher\": null,\n    \"students\": [\n        {\n        \"id\": \"8516cb15-65b7-4f40-826d-76046e678f01\",\n        \"name\": \"João Silva\",\n        \"email\": \"joao.silva@example.com\",\n        \"dateOfBirth\": \"2000-01-01T00:00:00Z\",\n        \"courses\": [\n            {\n                \"courseId\": \"fa2a952c-0c77-4e1d-b0cd-7bc3e5a4080e\",\n                \"name\": \"Introdução à Programação I\",\n                \"description\": \"Curso básico de introdução à programação I.\",\n                \"initialDate\": \"2024-08-01T00:00:00Z\",\n                \"finalDate\": \"2024-12-31T23:59:59Z\",\n                \"teacher\": null,\n                \"students\": [\n                    \"8516cb15-65b7-4f40-826d-76046e678f01\"\n                ]\n            }\n        ]\n    }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/courses/create-course",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"courses",
+						"create-course"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Student",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Pedro Henrique\",\n    \"email\": \"pedro.henrique@example.com\",\n    \"dateOfBirth\": \"2001-09-10T00:00:00Z\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/students/create-student",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"students",
+						"create-student"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Teacher",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Ana Paula Lima\",\n    \"email\": \"ana.lima@example.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/teachers/create-teacher",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"teachers",
+						"create-teacher"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Course",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Desenvolvimento Web\",\n    \"description\": \"Curso de desenvolvimento para a web.\",\n    \"initialDate\": \"2024-09-01T00:00:00Z\",\n    \"finalDate\": \"2024-12-31T23:59:59Z\",\n    \"students\": [\n        {\n            \"id\": \"d00b379d-83ac-4597-9f19-5efde9b547e3\",\n            \"name\": \"Fernanda Almeida\",\n            \"email\": \"fernanda.almeida@example.com\",\n            \"dateOfBirth\": \"1999-05-15T00:00:00Z\"\n        },\n        {\n            \"id\": \"aee52b6d-6740-4be5-ae0f-8e6356ad90ca\",\n            \"name\": \"Pedro Henrique\",\n            \"email\": \"pedro.henrique@example.com\",\n            \"dateOfBirth\": \"2001-09-10T00:00:00Z\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/courses/update-course/60b89b96-fa67-4de2-95fa-32e6ba5db6c6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"courses",
+						"update-course",
+						"60b89b96-fa67-4de2-95fa-32e6ba5db6c6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Student",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"João Silva\",\n    \"email\": \"joao.silva@example.com\",\n    \"dateOfBirth\": \"2000-01-01T00:00:00Z\",\n    \"courses\": [\n        {\n            \"courseId\": \"fa2a952c-0c77-4e1d-b0cd-7bc3e5a4080e\",\n            \"name\": \"Introdução à Programação I\",\n            \"description\": \"Curso básico de introdução à programação I.\",\n            \"initialDate\": \"2024-08-01T00:00:00Z\",\n            \"finalDate\": \"2024-12-31T23:59:59Z\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/students/update-student/8516cb15-65b7-4f40-826d-76046e678f01",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"students",
+						"update-student",
+						"8516cb15-65b7-4f40-826d-76046e678f01"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Teacher",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Maria Santos Costa\",\n    \"email\": \"maria.santos@example.com\",\n    \"courses\": [\n        {\n            \"courseId\": \"fa2a952c-0c77-4e1d-b0cd-7bc3e5a4080e\",\n            \"name\": \"Introdução à Programação I\",\n            \"description\": \"Curso básico de introdução à programação I.\",\n            \"initialDate\": \"2024-08-01T00:00:00Z\",\n            \"finalDate\": \"2024-12-31T23:59:59Z\"\n        },\n        {\n            \"courseId\": \"9f84bed1-9253-49c7-a05d-95b05a210519\",\n            \"name\": \"Estruturas de Dados\",\n            \"description\": \"Curso sobre estruturas de dados fundamentais.\",\n            \"initialDate\": \"2024-08-15T00:00:00Z\",\n            \"finalDate\": \"2024-12-15T23:59:59Z\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/teachers/update-teacher/717547a8-056e-484a-bb3f-6c4c1cb734a5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"teachers",
+						"update-teacher",
+						"717547a8-056e-484a-bb3f-6c4c1cb734a5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Teacher",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/teachers/delete-teacher/528b7db2-7dc4-43d4-aeca-ac509ea6cbca",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"teachers",
+						"delete-teacher",
+						"528b7db2-7dc4-43d4-aeca-ac509ea6cbca"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Student",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/students/delete-student/d41c29d6-ec1c-473a-b44e-d45c778dbc89",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"students",
+						"delete-student",
+						"d41c29d6-ec1c-473a-b44e-d45c778dbc89"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Courses",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/courses/delete-course/d41c29d6-ec1c-473a-b44e-d45c778dbc89",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"courses",
+						"delete-course",
+						"d41c29d6-ec1c-473a-b44e-d45c778dbc89"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
