@@ -53,6 +53,11 @@ public class CourseService {
     }
 
     public Course updateCourse(UUID courseId, Course course) {
+
+        if (course.getName() == null || course.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("O nome do curso é obrigatório!");
+        }
+
         Course existingCourse = courseRepository.findById(courseId).orElseThrow(() -> new RuntimeException("Curso não encontrado!"));
 
         existingCourse.setName(course.getName());
@@ -79,6 +84,7 @@ public class CourseService {
     }
 
     public void deleteCourse(UUID courseId) {
+        findCourseById(courseId);
         courseRepository.deleteById(courseId);
     }
 
