@@ -22,10 +22,7 @@ public class StudentService {
     private CourseRepository courseRepository;
 
     public Student createStudent(Student student) {
-
-        if (!EMAIL_PATTERN.matcher(student.getEmail()).matches()) {
-            throw new IllegalArgumentException("Email inválido!");
-        }
+        validateFiels(student);
 
         Student savedStudent = studentRepository.save(student);
 
@@ -39,9 +36,7 @@ public class StudentService {
 
     public Student updateStudent(UUID studentId, Student student) {
 
-        if (!EMAIL_PATTERN.matcher(student.getEmail()).matches()) {
-            throw new IllegalArgumentException("Email inválido!");
-        }
+        validateFiels(student);
 
         Student existingStudent = studentRepository.findById(studentId).orElseThrow(() -> new RuntimeException("Estudante não encontrado!"));
 
@@ -60,6 +55,7 @@ public class StudentService {
     }
 
     public void deleteStudent(UUID studentId) {
+        findStudentById(studentId);
         studentRepository.deleteById(studentId);
     }
 
@@ -69,5 +65,15 @@ public class StudentService {
 
     public Student findStudentById(UUID studentId) {
         return studentRepository.findById(studentId).orElseThrow(() -> new RuntimeException("Estudante não encontrado!"));
+    }
+
+    private void validateFiels(Student student) {
+        if (!EMAIL_PATTERN.matcher(student.getEmail()).matches()) {
+            throw new IllegalArgumentException("Email inválido!");
+        }
+
+        if(student.getName() == null || student.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("O nome do estudante é obrigatório!");
+        }
     }
 }

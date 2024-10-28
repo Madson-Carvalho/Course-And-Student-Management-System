@@ -54,6 +54,18 @@ public class StudentServiceTest extends BaseTest{
     }
 
     @Test
+    void createStudent_EmptyName() {
+        student.setName("");
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            studentService.createStudent(student);
+        });
+
+        assertEquals("O nome do estudante é obrigatório!", exception.getMessage());
+        verify(studentRepository, times(0)).save(any());
+    }
+
+    @Test
     void updateStudent() {
         Student updatedStudent = createStudent("Reginaldo Rossi atualizado", "reginaldo.rossi@example.com");
 
@@ -97,10 +109,36 @@ public class StudentServiceTest extends BaseTest{
     }
 
     @Test
+    void updateStudent_EmptyName() {
+        Student updatedStudent = createStudent("", "novo.email@example.com");
+
+        when(studentRepository.findById(studentId)).thenReturn(Optional.of(existingStudent));
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            studentService.updateStudent(studentId, updatedStudent);
+        });
+
+        assertEquals("O nome do estudante é obrigatório!", exception.getMessage());
+        verify(studentRepository, never()).save(any());
+    }
+
+    @Test
     void deleteStudent() {
         doNothing().when(studentRepository).deleteById(studentId);
         studentService.deleteStudent(studentId);
         verify(studentRepository, times(1)).deleteById(studentId);
+    }
+
+    @Test
+    void deleteStudent_NotFound() {
+        when(studentRepository.findById(studentId)).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            studentService.deleteStudent(studentId);
+        });
+
+        assertEquals("Estudante não encontrado!", exception.getMessage());
+        verify(studentRepository, times(0)).deleteById(studentId);
     }
 
     @Test
