@@ -53,6 +53,6 @@ public class TeacherService {
     }
 
     public Teacher findTeacherById(UUID teacherId){
-        return teacherRepository.findById(teacherId).orElse(null);
+        return teacherRepository.findById(teacherId).orElseThrow(() -> new RuntimeException("Professor não encontrado!"));
     }
 }

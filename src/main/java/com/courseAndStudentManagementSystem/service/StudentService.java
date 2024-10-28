@@ -9,15 +9,24 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 @Service
 public class StudentService {
+
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[\\w-.]+@[\\w-]+\\.[a-zA-Z]{2,}$");
+
     @Autowired
     private StudentRepository studentRepository;
     @Autowired
     private CourseRepository courseRepository;
 
     public Student createStudent(Student student) {
+
+        if (!EMAIL_PATTERN.matcher(student.getEmail()).matches()) {
+            throw new IllegalArgumentException("Email inválido!");
+        }
+
         Student savedStudent = studentRepository.save(student);
 
         for (Course course : student.getCourses()) {
@@ -29,6 +38,11 @@ public class StudentService {
     }
 
     public Student updateStudent(UUID studentId, Student student) {
+
+        if (!EMAIL_PATTERN.matcher(student.getEmail()).matches()) {
+            throw new IllegalArgumentException("Email inválido!");
+        }
+
         Student existingStudent = studentRepository.findById(studentId).orElseThrow(() -> new RuntimeException("Estudante não encontrado!"));
 
         existingStudent.setName(student.getName());
@@ -54,6 +68,6 @@ public class StudentService {
     }
 
     public Student findStudentById(UUID studentId) {
-        return studentRepository.findById(studentId).orElse(null);
+        return studentRepository.findById(studentId).orElseThrow(() -> new RuntimeException("Estudante não encontrado!"));
     }
 }

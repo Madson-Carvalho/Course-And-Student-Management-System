@@ -1,39 +1,39 @@
 package com.courseAndStudentManagementSystem;
 
 import com.courseAndStudentManagementSystem.model.Teacher;
-import com.courseAndStudentManagementSystem.repository.TeacherRepository;
 import com.courseAndStudentManagementSystem.service.TeacherService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class TeacherServiceTest {
-    @Mock
-    private TeacherRepository teacherRepository;
+public class TeacherServiceTest extends BaseTest{
 
     @InjectMocks
     private TeacherService teacherService;
+    private Teacher teacher;
+    private Teacher existingTeacher;
+    private UUID teacherId;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        teacherId = UUID.randomUUID();
+        teacher = createTeacher("Amado Batista", "amado_batista@example.com");
+        existingTeacher = createTeacher("Amado Batista", "amado_batista@example.com");
+        existingTeacher.setId(teacherId);
     }
 
     @Test
     void createTeacher() {
-        Teacher teacher = new Teacher();
-        teacher.setName("Amado Batista");
-        teacher.setEmail("amado_batista@example.com");
-
         when(teacherRepository.save(teacher)).thenReturn(teacher);
 
         Teacher createdTeacher = teacherService.createTeacher(teacher);
@@ -45,15 +45,7 @@ public class TeacherServiceTest {
 
     @Test
     void updateTeacher() {
-        UUID teacherId = UUID.randomUUID();
-        Teacher existingTeacher = new Teacher();
-        existingTeacher.setId(teacherId);
-        existingTeacher.setName("Amado Batista");
-        existingTeacher.setEmail("amado_batista@example.com");
-
-        Teacher updatedTeacher = new Teacher();
-        updatedTeacher.setName("Amado Batista atualizado");
-        updatedTeacher.setEmail("amado_batista@example.com");
+        Teacher updatedTeacher = createTeacher("Amado Batista atualizado", "amado.batista@example.com");
 
         when(teacherRepository.findById(teacherId)).thenReturn(Optional.of(existingTeacher));
         when(teacherRepository.save(existingTeacher)).thenReturn(existingTeacher);
@@ -67,12 +59,70 @@ public class TeacherServiceTest {
     }
 
     @Test
+    void updateTeacher_NotFound() {
+        Teacher updatedTeacher = createTeacher("Novo Nome", "novo.email@example.com");
+
+        when(teacherRepository.findById(teacherId)).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            teacherService.updateTeacher(teacherId, updatedTeacher);
+        });
+
+        assertEquals("Professor não encontrado!", exception.getMessage());
+        verify(teacherRepository, times(1)).findById(teacherId);
+    }
+
+    @Test
     void deleteTeacher() {
-        UUID teacherId = UUID.randomUUID();
         doNothing().when(teacherRepository).deleteById(teacherId);
-
         teacherService.deleteTeacher(teacherId);
-
         verify(teacherRepository, times(1)).deleteById(teacherId);
+    }
+
+    @Test
+    void findTeacherById() {
+        when(teacherRepository.findById(teacherId)).thenReturn(Optional.of(existingTeacher));
+
+        Teacher foundTeacher = teacherService.findTeacherById(teacherId);
+
+        assertNotNull(foundTeacher);
+        assertEquals(existingTeacher.getName(), foundTeacher.getName());
+        assertEquals(existingTeacher.getEmail(), foundTeacher.getEmail());
+        verify(teacherRepository, times(1)).findById(teacherId);
+    }
+
+    @Test
+    void findTeacherById_NotFound() {
+        when(teacherRepository.findById(teacherId)).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            teacherService.findTeacherById(teacherId);
+        });
+
+        assertEquals("Professor não encontrado!", exception.getMessage());
+        verify(teacherRepository, times(1)).findById(teacherId);
+    }
+
+    @Test
+    void listAllTeachers() {
+        List<Teacher> teachers = Arrays.asList(existingTeacher, createTeacher("Carlos Silva", "carlos.silva@example.com"));
+        when(teacherRepository.findAll()).thenReturn(teachers);
+
+        List<Teacher> allTeachers = teacherService.findAllTeacher();
+
+        assertNotNull(allTeachers);
+        assertEquals(2, allTeachers.size());
+        verify(teacherRepository, times(1)).findAll();
+    }
+
+    @Test
+    void listAllTeachers_EmptyList() {
+        when(teacherRepository.findAll()).thenReturn(Arrays.asList());
+
+        List<Teacher> allTeachers = teacherService.findAllTeacher();
+
+        assertNotNull(allTeachers);
+        assertTrue(allTeachers.isEmpty());
+        verify(teacherRepository, times(1)).findAll();
     }
 }

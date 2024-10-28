@@ -14,16 +14,31 @@ import java.util.UUID;
 
 @Service
 public class CourseService {
+
     @Autowired
     private CourseRepository courseRepository;
+
     @Autowired
     private TeacherRepository teacherRepository;
+
     @Autowired
     private StudentRepository studentRepository;
 
     public Course createCourse(Course course) {
+
+        if (course.getInitialDate().isAfter(course.getFinalDate())) {
+            throw new IllegalArgumentException("A data inicial não pode ser posterior à data final.");
+        }
+
+        if (course.getName() == null || course.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("O nome do curso é obrigatório!");
+        }
+
         Teacher teacher = course.getTeacher();
         if (teacher != null) {
+            if (!teacherRepository.existsById(teacher.getId())) {
+                throw new RuntimeException("Professor não encontrado!");
+            }
             course.setTeacher(teacher);
         }
 
@@ -72,6 +87,6 @@ public class CourseService {
     }
 
     public Course findCourseById(UUID courseId) {
-        return courseRepository.findById(courseId).orElse(null);
+        return courseRepository.findById(courseId).orElseThrow(() -> new RuntimeException("Curso não encontrado!"));
     }
 }
