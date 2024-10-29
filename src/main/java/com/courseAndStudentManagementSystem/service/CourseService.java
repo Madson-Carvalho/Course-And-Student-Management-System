@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
+import static com.courseAndStudentManagementSystem.utils.ValidateUtil.validateNotNullOrEmpty;
+
 @Service
 public class CourseService {
 
@@ -25,14 +27,7 @@ public class CourseService {
     private StudentRepository studentRepository;
 
     public Course createCourse(Course course) {
-
-        if (course.getInitialDate().isAfter(course.getFinalDate())) {
-            throw new IllegalArgumentException("A data inicial não pode ser posterior à data final.");
-        }
-
-        if (course.getName() == null || course.getName().trim().isEmpty()) {
-            throw new IllegalArgumentException("O nome do curso é obrigatório!");
-        }
+        validateFields(course);
 
         Teacher teacher = course.getTeacher();
         if (teacher != null) {
@@ -53,10 +48,7 @@ public class CourseService {
     }
 
     public Course updateCourse(UUID courseId, Course course) {
-
-        if (course.getName() == null || course.getName().trim().isEmpty()) {
-            throw new IllegalArgumentException("O nome do curso é obrigatório!");
-        }
+        validateFields(course);
 
         Course existingCourse = courseRepository.findById(courseId).orElseThrow(() -> new RuntimeException("Curso não encontrado!"));
 
@@ -95,4 +87,7 @@ public class CourseService {
     public Course findCourseById(UUID courseId) {
         return courseRepository.findById(courseId).orElseThrow(() -> new RuntimeException("Curso não encontrado!"));
     }
-}
+
+    private void validateFields(Course course){
+        validateNotNullOrEmpty(course.getName(),"O nome do curso é obrigatório!");
+    }}

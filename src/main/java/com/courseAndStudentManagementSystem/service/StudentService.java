@@ -9,12 +9,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.regex.Pattern;
+
+import static com.courseAndStudentManagementSystem.utils.ValidateUtil.validateEmail;
+import static com.courseAndStudentManagementSystem.utils.ValidateUtil.validateNotNullOrEmpty;
 
 @Service
 public class StudentService {
 
-    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[\\w-.]+@[\\w-]+\\.[a-zA-Z]{2,}$");
 
     @Autowired
     private StudentRepository studentRepository;
@@ -22,7 +23,7 @@ public class StudentService {
     private CourseRepository courseRepository;
 
     public Student createStudent(Student student) {
-        validateFiels(student);
+        validateFields(student);
 
         Student savedStudent = studentRepository.save(student);
 
@@ -36,7 +37,7 @@ public class StudentService {
 
     public Student updateStudent(UUID studentId, Student student) {
 
-        validateFiels(student);
+        validateFields(student);
 
         Student existingStudent = studentRepository.findById(studentId).orElseThrow(() -> new RuntimeException("Estudante não encontrado!"));
 
@@ -67,14 +68,8 @@ public class StudentService {
         return studentRepository.findById(studentId).orElseThrow(() -> new RuntimeException("Estudante não encontrado!"));
     }
 
-    private void validateFiels(Student student) {
-
-        if (!EMAIL_PATTERN.matcher(student.getEmail()).matches()) {
-            throw new IllegalArgumentException("Email inválido!");
-        }
-
-        if(student.getName() == null || student.getName().trim().isEmpty()) {
-            throw new IllegalArgumentException("O nome do estudante é obrigatório!");
-        }
+    private void validateFields(Student student){
+        validateNotNullOrEmpty(student.getName(),"O nome do estudante é obrigatório!");
+        validateEmail(student.getEmail());
     }
 }

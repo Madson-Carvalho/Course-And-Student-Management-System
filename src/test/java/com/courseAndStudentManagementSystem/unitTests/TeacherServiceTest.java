@@ -1,4 +1,4 @@
-package com.courseAndStudentManagementSystem;
+package com.courseAndStudentManagementSystem.unitTests;
 
 import com.courseAndStudentManagementSystem.model.Teacher;
 import com.courseAndStudentManagementSystem.service.TeacherService;
@@ -50,7 +50,7 @@ public class TeacherServiceTest extends BaseTest{
             teacherService.createTeacher(teacher);
         });
 
-        assertEquals("Email inválido", exception.getMessage());
+        assertEquals("Email inválido!", exception.getMessage());
         verify(teacherRepository, times(0)).save(any());
     }
 
@@ -104,7 +104,7 @@ public class TeacherServiceTest extends BaseTest{
             teacherService.updateTeacher(teacherId, updatedTeacher);
         });
 
-        assertEquals("Email inválido", exception.getMessage());
+        assertEquals("Email inválido!", exception.getMessage());
         verify(teacherRepository, never()).save(any());
     }
 

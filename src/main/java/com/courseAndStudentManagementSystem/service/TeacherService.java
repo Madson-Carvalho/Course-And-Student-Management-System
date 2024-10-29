@@ -9,12 +9,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.regex.Pattern;
+
+import static com.courseAndStudentManagementSystem.utils.ValidateUtil.validateEmail;
+import static com.courseAndStudentManagementSystem.utils.ValidateUtil.validateNotNullOrEmpty;
 
 @Service
 public class TeacherService {
-
-    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[\\w-.]+@[\\w-]+\\.[a-zA-Z]{2,}$");
 
     @Autowired
     private TeacherRepository teacherRepository;
@@ -64,13 +64,7 @@ public class TeacherService {
     }
 
     private void validateFields(Teacher teacher){
-
-        if (teacher.getName() == null || teacher.getName().isEmpty()) {
-            throw new IllegalArgumentException("O nome do professor é obrigatório");
-        }
-
-        if(!EMAIL_PATTERN.matcher(teacher.getEmail()).matches()) {
-            throw new IllegalArgumentException("Email inválido");
-        }
+        validateNotNullOrEmpty(teacher.getName(),"O nome do professor é obrigatório");
+        validateEmail(teacher.getEmail());
     }
 }

@@ -1,4 +1,4 @@
-package com.courseAndStudentManagementSystem;
+package com.courseAndStudentManagementSystem.unitTests;
 
 import com.courseAndStudentManagementSystem.model.Course;
 import com.courseAndStudentManagementSystem.model.Teacher;
