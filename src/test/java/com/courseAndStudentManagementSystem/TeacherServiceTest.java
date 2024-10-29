@@ -44,6 +44,28 @@ public class TeacherServiceTest extends BaseTest{
     }
 
     @Test
+    void createTeacher_InvalidEmail() {
+        teacher.setEmail("maria@invalid");
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            teacherService.createTeacher(teacher);
+        });
+
+        assertEquals("Email inválido", exception.getMessage());
+        verify(teacherRepository, times(0)).save(any());
+    }
+
+    @Test
+    void createTeacher_EmptyName() {
+        teacher.setName("");
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            teacherService.createTeacher(teacher);
+        });
+
+        assertEquals("O nome do professor é obrigatório", exception.getMessage());
+        verify(teacherRepository, times(0)).save(any());
+    }
+
+    @Test
     void updateTeacher() {
         Teacher updatedTeacher = createTeacher("Amado Batista atualizado", "amado.batista@example.com");
 
@@ -73,10 +95,51 @@ public class TeacherServiceTest extends BaseTest{
     }
 
     @Test
+    void updateTeacher_InvalidEmail() {
+        Teacher updatedTeacher = createTeacher("Maria dos Santos", "maria@invalid");
+
+        when(teacherRepository.findById(teacherId)).thenReturn(Optional.of(existingTeacher));
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            teacherService.updateTeacher(teacherId, updatedTeacher);
+        });
+
+        assertEquals("Email inválido", exception.getMessage());
+        verify(teacherRepository, never()).save(any());
+    }
+
+    @Test
+    void updateTeacher_EmptyName() {
+        Teacher updatedTeacher = createTeacher("", "novo.email@example.com");
+
+        when(teacherRepository.findById(teacherId)).thenReturn(Optional.of(existingTeacher));
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            teacherService.updateTeacher(teacherId, updatedTeacher);
+        });
+
+        assertEquals("O nome do professor é obrigatório", exception.getMessage());
+        verify(teacherRepository, never()).save(any());
+    }
+
+    @Test
     void deleteTeacher() {
         doNothing().when(teacherRepository).deleteById(teacherId);
+        when(teacherRepository.findById(teacherId)).thenReturn(Optional.of(existingTeacher));
         teacherService.deleteTeacher(teacherId);
         verify(teacherRepository, times(1)).deleteById(teacherId);
+    }
+
+    @Test
+    void deleteTeacher_NotFound() {
+        when(teacherRepository.findById(teacherId)).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            teacherService.deleteTeacher(teacherId);
+        });
+
+        assertEquals("Professor não encontrado!", exception.getMessage());
+        verify(teacherRepository, times(0)).deleteById(teacherId);
     }
 
     @Test

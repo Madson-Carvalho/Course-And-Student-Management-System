@@ -68,6 +68,7 @@ public class StudentService {
     }
 
     private void validateFiels(Student student) {
+
         if (!EMAIL_PATTERN.matcher(student.getEmail()).matches()) {
             throw new IllegalArgumentException("Email inválido!");
         }

@@ -125,6 +125,7 @@ public class StudentServiceTest extends BaseTest{
     @Test
     void deleteStudent() {
         doNothing().when(studentRepository).deleteById(studentId);
+        when(studentRepository.findById(studentId)).thenReturn(Optional.of(existingStudent));
         studentService.deleteStudent(studentId);
         verify(studentRepository, times(1)).deleteById(studentId);
     }
