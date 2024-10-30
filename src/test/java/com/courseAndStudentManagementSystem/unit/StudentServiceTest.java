@@ -1,4 +1,4 @@
-package com.courseAndStudentManagementSystem.unitTests;
+package com.courseAndStudentManagementSystem.unit;
 
 import com.courseAndStudentManagementSystem.model.Student;
 import com.courseAndStudentManagementSystem.service.StudentService;
@@ -15,7 +15,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class StudentServiceTest extends BaseTest{
+public class StudentServiceTest extends BaseUnitTest {
 
     @InjectMocks
     private StudentService studentService;

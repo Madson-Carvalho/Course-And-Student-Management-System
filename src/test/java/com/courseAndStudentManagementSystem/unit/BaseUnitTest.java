@@ -1,4 +1,4 @@
-package com.courseAndStudentManagementSystem.unitTests;
+package com.courseAndStudentManagementSystem.unit;
 
 import com.courseAndStudentManagementSystem.model.Course;
 import com.courseAndStudentManagementSystem.model.Student;
@@ -10,7 +10,7 @@ import org.mockito.Mock;
 
 import java.time.Instant;
 
-public abstract class BaseTest {
+public abstract class BaseUnitTest {
 
     @Mock
     protected CourseRepository courseRepository;
