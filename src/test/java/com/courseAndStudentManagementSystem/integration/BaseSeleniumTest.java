@@ -7,6 +7,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -55,11 +56,18 @@ public abstract class BaseSeleniumTest {
         element.sendKeys(text);
     }
 
-    protected String getText(By locator) {
-        return driver.findElement(locator).getText();
-    }
-
     protected void waitForUrlToBe(String expectedUrl) {
         wait.until(ExpectedConditions.urlToBe(expectedUrl));
+    }
+
+    protected void releaseElement(WebElement element) {
+        Actions builder = new Actions(driver);
+        builder.release(element).perform();
+    }
+
+    protected void moveToAndClick(By locator) {
+        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
+        Actions builder = new Actions(driver);
+        builder.moveToElement(element).click().perform();
     }
 }
