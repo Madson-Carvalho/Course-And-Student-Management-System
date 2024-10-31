@@ -10,14 +10,19 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
+import static com.courseAndStudentManagementSystem.utils.ValidateUtil.validateEmail;
+import static com.courseAndStudentManagementSystem.utils.ValidateUtil.validateNotNullOrEmpty;
+
 @Service
 public class TeacherService {
+
     @Autowired
     private TeacherRepository teacherRepository;
     @Autowired
     private CourseRepository courseRepository;
 
     public Teacher createTeacher(Teacher teacher){
+        validateFields(teacher);
         Teacher savedTeacher = teacherRepository.save(teacher);
 
         for (Course course : teacher.getCourses()) {
@@ -29,6 +34,7 @@ public class TeacherService {
     }
 
     public Teacher updateTeacher(UUID teacherId, Teacher teacher){
+        validateFields(teacher);
         Teacher existingTeacher = teacherRepository.findById(teacherId).orElseThrow(() -> new RuntimeException("Professor não encontrado!"));
 
         existingTeacher.setName(teacher.getName());
@@ -45,6 +51,7 @@ public class TeacherService {
     }
 
     public void deleteTeacher(UUID teacherId){
+        findTeacherById(teacherId);
         teacherRepository.deleteById(teacherId);
     }
 
@@ -53,6 +60,11 @@ public class TeacherService {
     }
 
     public Teacher findTeacherById(UUID teacherId){
-        return teacherRepository.findById(teacherId).orElse(null);
+        return teacherRepository.findById(teacherId).orElseThrow(() -> new RuntimeException("Professor não encontrado!"));
+    }
+
+    private void validateFields(Teacher teacher){
+        validateNotNullOrEmpty(teacher.getName(),"O nome do professor é obrigatório");
+        validateEmail(teacher.getEmail());
     }
 }

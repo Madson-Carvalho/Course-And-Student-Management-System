@@ -12,18 +12,28 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
+import static com.courseAndStudentManagementSystem.utils.ValidateUtil.validateNotNullOrEmpty;
+
 @Service
 public class CourseService {
+
     @Autowired
     private CourseRepository courseRepository;
+
     @Autowired
     private TeacherRepository teacherRepository;
+
     @Autowired
     private StudentRepository studentRepository;
 
     public Course createCourse(Course course) {
+        validateFields(course);
+
         Teacher teacher = course.getTeacher();
         if (teacher != null) {
+            if (!teacherRepository.existsById(teacher.getId())) {
+                throw new RuntimeException("Professor não encontrado!");
+            }
             course.setTeacher(teacher);
         }
 
@@ -38,6 +48,8 @@ public class CourseService {
     }
 
     public Course updateCourse(UUID courseId, Course course) {
+        validateFields(course);
+
         Course existingCourse = courseRepository.findById(courseId).orElseThrow(() -> new RuntimeException("Curso não encontrado!"));
 
         existingCourse.setName(course.getName());
@@ -64,6 +76,7 @@ public class CourseService {
     }
 
     public void deleteCourse(UUID courseId) {
+        findCourseById(courseId);
         courseRepository.deleteById(courseId);
     }
 
@@ -72,6 +85,9 @@ public class CourseService {
     }
 
     public Course findCourseById(UUID courseId) {
-        return courseRepository.findById(courseId).orElse(null);
+        return courseRepository.findById(courseId).orElseThrow(() -> new RuntimeException("Curso não encontrado!"));
     }
-}
+
+    private void validateFields(Course course){
+        validateNotNullOrEmpty(course.getName(),"O nome do curso é obrigatório!");
+    }}
